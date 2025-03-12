@@ -1,23 +1,21 @@
-FROM ubuntu:22.04
+FROM python:latest
 
-# system dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    postgresql-client \
-    libpq-dev \
+# Install pipx
+RUN apt-get update && apt-get install -y pipx
+RUN pipx ensurepath
 
-# Poetry 
+# Install poetry
 RUN pip3 install poetry
 
-# Set the working directory
+# working directory
 WORKDIR /app
 
-# Copy dependency file first for caching then install dependencies without installing the root package
-COPY pyproject.toml .
-RUN poetry install --no-root
+#install poetry dependencies
+COPY pyproject.toml ./
+RUN pipx run poetry install --no-root
 
-COPY todo todo
+# copy app into container
+COPY todo todo 
 
-# shell command that waits for the database, then starts Flask
-CMD ["poetry", "run", "flask", "--app", "todo", "run", "--host", "0.0.0.0", "--port", "6400"]
+# run
+CMD ["bash", "-c", "until nc -z database 5432; do echo 'Waiting for database...'; sleep 30; done; poetry run flask --app todo run --host 0.0.0.0 --port 6400"]
