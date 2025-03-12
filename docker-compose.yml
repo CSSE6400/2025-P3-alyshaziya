@@ -7,12 +7,12 @@ services:
       POSTGRES_USER: administrator 
       POSTGRES_DB: todo 
     volumes: 
-      - dbdata:/var/lib/postgresql/data 
+      - ./data/db:/var/lib/postgresql/data 
   app: 
     build: . 
     restart: always 
     environment: 
-      SQLALCHEMY_DATABASE_URI: postgresql://administrator:verySecretPassword@database:5432/todo
+      SQLALCHEMY_DATABASE_URI: postgresql://administrator:verySecretPassword@database:5432/todo 
     ports: 
       - "6400:6400" 
     depends_on: 
