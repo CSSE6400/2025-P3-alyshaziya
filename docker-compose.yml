@@ -17,5 +17,3 @@ services:
       - "6400:6400" 
     depends_on: 
       - database
-volumes:
-  dbdata:
