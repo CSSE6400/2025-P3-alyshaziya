@@ -7,7 +7,8 @@ services:
       POSTGRES_USER: administrator 
       POSTGRES_DB: todo 
     volumes: 
-      - ./data/db:/var/lib/postgresql/data 
+      #- dbdata:/var/lib/postgresql/data #local
+      - ./data/db:/var/lib/postgresql/data #git
   app: 
     build: . 
     restart: always 
@@ -17,3 +18,6 @@ services:
       - "6400:6400" 
     depends_on: 
       - database
+#volumes: #local
+  #dbdata:
+    
